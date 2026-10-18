@@ -1,0 +1,264 @@
+@import './tokens.css';
+
+/* =====================================================================
+   GLOBAL CARTOGRAPHIC RESETS & BASE STYLES
+   ===================================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+/* Cartographic Grid Background Pattern for field aesthetics */
+.cartographic-bg {
+  background-color: var(--bg-primary);
+  background-image: 
+    linear-gradient(to right, rgba(23, 42, 39, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(23, 42, 39, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Subtle contour line accent overlay */
+.contour-accent {
+  background-image: radial-gradient(circle at 50% 50%, rgba(216, 243, 106, 0.08) 0%, transparent 60%);
+}
+
+/* Typography styles */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.mono-readout {
+  font-family: var(--font-mono);
+  font-feature-settings: 'tnum' 1, 'zero' 1;
+  letter-spacing: -0.01em;
+}
+
+/* Instrument Buttons */
+.btn-instrument {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 14px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.btn-instrument:hover:not(:disabled) {
+  background: #EBE7DC;
+  border-color: var(--text-primary);
+  transform: translateY(-1px);
+}
+
+.btn-instrument:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-instrument:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Vermilion Action Button (Start Tracking / Alert) */
+.btn-vermilion {
+  background: var(--color-vermilion);
+  color: #FFFFFF;
+  border: 1px solid #D64E30;
+  box-shadow: 0 2px 6px rgba(236, 91, 59, 0.35);
+}
+
+.btn-vermilion:hover:not(:disabled) {
+  background: #DE4C2B;
+  color: #FFFFFF;
+  border-color: #BF3B1D;
+  box-shadow: 0 4px 10px rgba(236, 91, 59, 0.45);
+}
+
+/* Forest Ink Primary Button */
+.btn-forest {
+  background: var(--color-forest);
+  color: var(--color-chartreuse);
+  border: 1px solid #233D39;
+}
+
+.btn-forest:hover:not(:disabled) {
+  background: #1C3330;
+  color: #FFFFFF;
+  border-color: var(--color-chartreuse);
+}
+
+/* Chartreuse Alert/Demo Button */
+.btn-chartreuse {
+  background: var(--color-chartreuse);
+  color: var(--color-forest);
+  border: 1px solid #C4E24E;
+  font-weight: 700;
+}
+
+.btn-chartreuse:hover:not(:disabled) {
+  background: #E3F888;
+  color: #0E1C1A;
+}
+
+/* Dark panel button */
+.btn-dark-subtle {
+  background: var(--bg-panel-subtle);
+  color: var(--text-on-dark);
+  border: 1px solid var(--border-dark-hairline);
+}
+
+.btn-dark-subtle:hover:not(:disabled) {
+  background: #2E4B46;
+  border-color: var(--text-on-dark-secondary);
+}
+
+/* Badges & Tags */
+.instrument-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 7px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  border-radius: var(--radius-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-live {
+  background: rgba(216, 243, 106, 0.2);
+  color: #172A27;
+  border: 1px solid var(--color-chartreuse);
+}
+
+.badge-simulated {
+  background: rgba(236, 91, 59, 0.15);
+  color: var(--color-vermilion);
+  border: 1px dashed var(--color-vermilion);
+  font-weight: 600;
+}
+
+.badge-dark-live {
+  background: rgba(216, 243, 106, 0.18);
+  color: var(--color-chartreuse);
+  border: 1px solid var(--color-chartreuse);
+}
+
+.badge-idle {
+  background: var(--bg-stone-subtle);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-hairline);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(23, 42, 39, 0.04);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-stone);
+  border-radius: var(--radius-xs);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Focus Visible for Accessibility */
+:focus-visible {
+  outline: 2px solid var(--color-chartreuse);
+  outline-offset: 2px;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Leaflet Custom Marker & Styling Overrides */
+.leaflet-container {
+  font-family: var(--font-sans) !important;
+  background-color: #E7E3D8 !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background-color: var(--color-forest) !important;
+  color: var(--color-ivory) !important;
+  border-radius: var(--radius-sm) !important;
+  border: 1px solid var(--color-chartreuse) !important;
+  box-shadow: var(--shadow-panel) !important;
+}
+
+.leaflet-popup-tip {
+  background-color: var(--color-forest) !important;
+}
+
+/* Live Position Beacon Animation */
+@keyframes beaconPulse {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.9;
+    box-shadow: 0 0 0 0 rgba(216, 243, 106, 0.8);
+  }
+  70% {
+    transform: scale(1.4);
+    opacity: 0;
+    box-shadow: 0 0 0 16px rgba(216, 243, 106, 0);
+  }
+  100% {
+    transform: scale(0.9);
+    opacity: 0;
+    box-shadow: 0 0 0 0 rgba(216, 243, 106, 0);
+  }
+}
+
+.live-beacon-ring {
+  animation: beaconPulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+.vermilion-beacon-ring {
+  animation: beaconPulse 1.6s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}

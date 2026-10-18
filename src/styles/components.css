@@ -1,0 +1,817 @@
+/* =====================================================================
+   COMPONENT STYLES: CARTOGRAPHER'S FIELD CONSOLE
+   ===================================================================== */
+
+/* Outer Shell */
+.app-shell {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--bg-primary);
+}
+
+/* 1. Narrow Vertical Navigation Rail */
+.nav-rail {
+  width: 68px;
+  flex-shrink: 0;
+  height: 100vh;
+  background-color: var(--color-forest);
+  border-right: 1px solid var(--border-dark-hairline);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  z-index: 1000;
+  user-select: none;
+}
+
+.nav-rail-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.nav-logo-mark {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: var(--bg-panel-elevated);
+  border: 1px solid var(--color-chartreuse);
+  color: var(--color-chartreuse);
+  position: relative;
+  transition: all var(--transition-fast);
+}
+
+.nav-logo-mark:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 12px var(--accent-chartreuse-glow);
+}
+
+.nav-items-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  align-items: center;
+}
+
+.nav-button {
+  width: 46px;
+  height: 46px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-on-dark-secondary);
+  cursor: pointer;
+  position: relative;
+  transition: all var(--transition-fast);
+  padding: 4px;
+}
+
+.nav-button:hover {
+  color: var(--text-on-dark);
+  background: var(--bg-panel-elevated);
+  border-color: var(--border-dark-hairline);
+}
+
+.nav-button.active {
+  color: var(--color-chartreuse);
+  background: var(--bg-panel-subtle);
+  border-color: var(--color-chartreuse);
+}
+
+.nav-button.active::before {
+  content: '';
+  position: absolute;
+  left: -11px;
+  top: 10px;
+  bottom: 10px;
+  width: 3px;
+  background-color: var(--color-chartreuse);
+  border-radius: 0 2px 2px 0;
+}
+
+.nav-label-micro {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.nav-rail-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.live-indicator-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-stone);
+}
+
+.live-indicator-dot.active {
+  background-color: var(--color-chartreuse);
+  box-shadow: 0 0 8px var(--color-chartreuse);
+}
+
+.live-indicator-dot.simulated {
+  background-color: var(--color-vermilion);
+  box-shadow: 0 0 8px var(--color-vermilion);
+}
+
+/* 2. Main Content Canvas Area */
+.app-main {
+  flex: 1;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Editorial Header */
+.editorial-header {
+  height: 58px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-hairline);
+  z-index: 10;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-title-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-wordmark {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-forest);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.app-wordmark span {
+  color: var(--color-vermilion);
+}
+
+.header-subtitle {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.header-meta-divider {
+  width: 1px;
+  height: 24px;
+  background-color: var(--border-strong);
+}
+
+.header-session-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  background: var(--bg-stone-subtle);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Field Console Workspace (Map + Telemetry side panel) */
+.console-workspace {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Spacious Map Canvas Container */
+.map-canvas-container {
+  flex: 1;
+  height: 100%;
+  position: relative;
+  background-color: #E7E3D8;
+}
+
+.leaflet-map-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+/* Floating Map Overlay Controls */
+.map-floating-bar-top {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 900;
+  display: flex;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.map-floating-bar-right {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.map-floating-legend {
+  position: absolute;
+  bottom: 16px;
+  left: 14px;
+  z-index: 900;
+  background: rgba(23, 42, 39, 0.92);
+  backdrop-filter: blur(4px);
+  color: var(--color-ivory);
+  border: 1px solid var(--border-dark-hairline);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  pointer-events: auto;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-line-trail {
+  width: 18px;
+  height: 3px;
+  background-color: var(--color-vermilion);
+  border-radius: 1px;
+}
+
+.legend-dot-live {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--color-chartreuse);
+  border: 1px solid var(--color-forest);
+}
+
+.legend-dot-origin {
+  width: 8px;
+  height: 8px;
+  background-color: #FFFFFF;
+  border: 2px solid var(--color-forest);
+}
+
+/* 3. Dedicated Telemetry Panel Beside the Map */
+.telemetry-panel {
+  width: 380px;
+  flex-shrink: 0;
+  height: 100%;
+  background-color: var(--color-forest);
+  color: var(--text-on-dark);
+  border-left: 1px solid var(--border-dark-hairline);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 20;
+}
+
+.telemetry-header {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border-dark-hairline);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.telemetry-title {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-chartreuse);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.telemetry-status-pill {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: var(--radius-xs);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* Coordinate Instrument Block (High Visual Precision) */
+.telemetry-coordinates-block {
+  padding: 16px 18px;
+  background: var(--bg-panel-elevated);
+  border-bottom: 1px solid var(--border-dark-hairline);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.coord-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.coord-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-on-dark-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.coord-value {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-ivory);
+  letter-spacing: -0.01em;
+}
+
+.coord-dms-subtext {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-on-dark-dim);
+  text-align: right;
+  margin-top: -8px;
+}
+
+/* Primary Telemetry Metrics Matrix (2x2 Grid) */
+.telemetry-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background-color: var(--border-dark-hairline);
+  border-bottom: 1px solid var(--border-dark-hairline);
+}
+
+.telemetry-cell {
+  background-color: var(--color-forest);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.telemetry-cell-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-on-dark-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.telemetry-cell-value {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--color-ivory);
+  letter-spacing: -0.02em;
+}
+
+.telemetry-cell-value.accent-chartreuse {
+  color: var(--color-chartreuse);
+}
+
+.telemetry-cell-value.accent-vermilion {
+  color: var(--color-vermilion);
+}
+
+.telemetry-cell-sub {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-on-dark-dim);
+}
+
+/* Secondary Metrics & Sensor Status */
+.telemetry-subgrid {
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-bottom: 1px solid var(--border-dark-hairline);
+}
+
+.telemetry-keyvalue {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.telemetry-key {
+  color: var(--text-on-dark-secondary);
+}
+
+.telemetry-val {
+  color: var(--color-ivory);
+  font-weight: 500;
+}
+
+/* Tracking Controls Section inside Telemetry */
+.telemetry-actions-section {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-bottom: 1px solid var(--border-dark-hairline);
+  background: var(--bg-panel-elevated);
+}
+
+.control-buttons-row {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+/* Live Points Feed / Telemetry Chronological List */
+.telemetry-points-feed {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 180px;
+}
+
+.feed-header {
+  padding: 12px 18px;
+  background: var(--color-forest);
+  border-bottom: 1px solid var(--border-dark-hairline);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.feed-title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--text-on-dark-secondary);
+  letter-spacing: 0.05em;
+}
+
+.feed-list {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  max-height: 240px;
+}
+
+.feed-item {
+  padding: 10px 18px;
+  border-bottom: 1px solid rgba(243, 240, 231, 0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  transition: background var(--transition-fast);
+}
+
+.feed-item:hover {
+  background: var(--bg-panel-elevated);
+}
+
+.feed-item-coords {
+  color: var(--color-ivory);
+}
+
+.feed-item-meta {
+  color: var(--text-on-dark-dim);
+  text-align: right;
+}
+
+/* 4. Bottom Movement Timeline or Trip-History Strip */
+.bottom-timeline-strip {
+  height: 62px;
+  flex-shrink: 0;
+  background-color: var(--bg-surface);
+  border-top: 1px solid var(--border-hairline);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 15;
+}
+
+.timeline-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.timeline-strip-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.timeline-points-bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.timeline-node {
+  width: 8px;
+  height: 8px;
+  border-radius: 1px;
+  background-color: var(--color-stone);
+  transition: transform var(--transition-fast);
+}
+
+.timeline-node.highlighted {
+  background-color: var(--color-vermilion);
+  transform: scale(1.3);
+}
+
+.timeline-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* Local Mode / Simulated Mode Notice Bar */
+.status-alert-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 18px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  font-weight: 500;
+  border-bottom: 1px solid transparent;
+}
+
+.status-alert-bar.simulated {
+  background: #FFF4E5;
+  color: #8C3707;
+  border-color: #F8D7B0;
+}
+
+.status-alert-bar.local {
+  background: #EFEFE9;
+  color: #36443E;
+  border-color: #D3D5CD;
+}
+
+.status-alert-bar.error {
+  background: #FDF0ED;
+  color: #B52B0E;
+  border-color: #F5C5BB;
+}
+
+/* Route History Page Styles */
+.history-page-container {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  background-color: var(--bg-primary);
+}
+
+.history-page-header {
+  margin-bottom: 24px;
+}
+
+.history-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 18px;
+}
+
+.history-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-sm);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: var(--shadow-instrument);
+  transition: all var(--transition-fast);
+}
+
+.history-card:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-elevation);
+}
+
+.history-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.history-card-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 12px;
+  background: var(--bg-stone-subtle);
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
+}
+
+/* Modals */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(23, 42, 39, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+}
+
+.modal-dialog {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  width: 100%;
+  max-width: 500px;
+  box-shadow: var(--shadow-panel);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 18px 22px;
+  background: var(--color-forest);
+  color: var(--color-ivory);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-body {
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 75vh;
+  overflow-y: auto;
+}
+
+.modal-footer {
+  padding: 14px 22px;
+  background: var(--bg-stone-subtle);
+  border-top: 1px solid var(--border-hairline);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Form inputs in Cartographer style */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+}
+
+.form-input {
+  padding: 10px 12px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-xs);
+  background: #FFFFFF;
+  color: var(--text-primary);
+  transition: border-color var(--transition-fast);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-forest);
+  box-shadow: 0 0 0 2px rgba(23, 42, 39, 0.15);
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1024px) {
+  .telemetry-panel {
+    width: 320px;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-shell {
+    flex-direction: column-reverse;
+  }
+
+  .nav-rail {
+    width: 100vw;
+    height: 56px;
+    flex-direction: row;
+    padding: 0 12px;
+    border-right: none;
+    border-top: 1px solid var(--border-dark-hairline);
+  }
+
+  .nav-rail-top {
+    flex-direction: row;
+    width: auto;
+  }
+
+  .nav-items-group {
+    flex-direction: row;
+    width: auto;
+  }
+
+  .nav-rail-bottom {
+    flex-direction: row;
+    width: auto;
+  }
+
+  .console-workspace {
+    flex-direction: column;
+  }
+
+  .telemetry-panel {
+    width: 100%;
+    height: 40%;
+    border-left: none;
+    border-top: 1px solid var(--border-dark-hairline);
+  }
+
+  .editorial-header {
+    height: 50px;
+    padding: 0 12px;
+  }
+
+  .bottom-timeline-strip {
+    display: none;
+  }
+}
