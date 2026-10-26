@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoTrack — WMC 7-Slide Academic Presentation</title>
+  <style>
+    :root {
+      --bg: #0F1715;
+      --card-bg: #172A27;
+      --accent: #D8F36A;
+      --highlight: #EC5B3B;
+      --text: #F3F0E7;
+      --text-muted: #A5AAA0;
+      --border: #2C423E;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+      user-select: none;
+    }
+    header {
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      background: rgba(23, 42, 39, 0.7);
+      backdrop-filter: blur(8px);
+    }
+    .badge {
+      background: var(--accent);
+      color: #172A27;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .slide-deck {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .slide {
+      display: none;
+      width: 100%;
+      max-width: 1100px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 40px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      animation: fadeIn 0.3s ease-out;
+    }
+    .slide.active { display: block; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h1 { font-size: 34px; color: var(--accent); margin-bottom: 8px; }
+    h2 { font-size: 26px; color: var(--accent); margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+    h3 { font-size: 18px; color: var(--highlight); margin-bottom: 12px; }
+    p, li { font-size: 16px; line-height: 1.6; color: var(--text); }
+    ul { margin-left: 24px; margin-bottom: 16px; }
+    li { margin-bottom: 8px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 16px; }
+    .card {
+      background: rgba(15, 23, 21, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .card-highlight { border-color: var(--accent); }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      text-align: left;
+    }
+    th { background: rgba(216, 243, 106, 0.1); color: var(--accent); font-weight: 600; }
+    .formula {
+      font-family: "Courier New", monospace;
+      background: rgba(0,0,0,0.4);
+      padding: 10px 14px;
+      border-left: 3px solid var(--accent);
+      margin: 10px 0;
+      color: #9EE7FF;
+      font-size: 14px;
+      border-radius: 0 4px 4px 0;
+    }
+    .speaker-note {
+      margin-top: 20px;
+      background: rgba(236, 91, 59, 0.1);
+      border-left: 3px solid var(--highlight);
+      padding: 12px 16px;
+      border-radius: 0 6px 6px 0;
+      font-size: 13px;
+      color: #FFB3A1;
+    }
+    .speaker-note strong { color: var(--highlight); }
+    footer {
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border);
+      background: rgba(23, 42, 39, 0.7);
+    }
+    .controls button {
+      background: var(--border);
+      color: var(--text);
+      border: none;
+      padding: 8px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-left: 8px;
+      transition: all 0.2s;
+    }
+    .controls button:hover {
+      background: var(--accent);
+      color: #172A27;
+    }
+    .page-indicator {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div>
+      <span class="badge">WMC Mini-Project</span>
+      <span style="margin-left: 10px; font-weight: 600;">Mumbai University | BE CSE(DS) Sem 3</span>
+    </div>
+    <div style="font-size: 13px; color: var(--text-muted);">
+      Press <kbd>&larr;</kbd> and <kbd>&rarr;</kbd> arrow keys to navigate
+    </div>
+  </header>
+
+  <main class="slide-deck">
+
+    <!-- SLIDE 1 -->
+    <div class="slide active" id="slide-1">
+      <div style="text-align: center; padding: 20px 0;">
+        <span class="badge" style="font-size: 13px; padding: 6px 14px;">Academic Presentation</span>
+        <h1 style="font-size: 44px; margin: 18px 0 8px 0;">🧭 GEOTRACK</h1>
+        <h3 style="color: var(--text-muted); font-size: 20px; font-weight: 400; margin-bottom: 24px;">
+          High-Precision GPS Telemetry & Live Location Tracking System
+        </h3>
+      </div>
+      <div class="grid-2">
+        <div class="card card-highlight">
+          <h3 style="color: var(--accent);">Subject Context</h3>
+          <p><strong>Course:</strong> Wireless & Mobile Communication (WMC)</p>
+          <p><strong>Department:</strong> B.E. Computer Science & Engg. (Data Science)</p>
+          <p><strong>Semester:</strong> Semester 3 — University of Mumbai</p>
+        </div>
+        <div class="card">
+          <h3 style="color: var(--accent);">Key Focus Areas</h3>
+          <ul>
+            <li>Multi-Constellation GNSS (GPS L1/L5, NavIC)</li>
+            <li>A-GPS Signaling & SUPL Control Plane</li>
+            <li>1D Kalman Filter Noise Smoothing</li>
+            <li>Haversine Geodesic Vector Engine</li>
+          </ul>
+        </div>
+      </div>
+      <div class="speaker-note">
+        <strong>🎙️ Speaker Script:</strong> "Good morning examiners. Today we present GeoTrack, an academic live telemetry system built for the Wireless Mobile Communication curriculum that analyzes radio signal propagation, Assisted GPS, and statistical Kalman filtering."
+      </div>
+    </div>
+
+    <!-- SLIDE 2 -->
+    <div class="slide" id="slide-2">
+      <h2>Slide 2: Real-World Wireless Positioning Challenges</h2>
+      <div class="grid-4">
+        <div class="card">
+          <h3 style="font-size: 15px;">1. Cold Start TTFF</h3>
+          <p style="font-size: 13px;">Downloading 50 bps broadcast satellite ephemeris takes <strong>30–60 seconds</strong> under standalone GPS.</p>
+        </div>
+        <div class="card">
+          <h3 style="font-size: 15px;">2. Multipath Fading</h3>
+          <p style="font-size: 13px;">Reflections off high-rise buildings in urban canyons cause abrupt <strong>50m–150m false jumps</strong>.</p>
+        </div>
+        <div class="card">
+          <h3 style="font-size: 15px;">3. Receiver Clock Bias</h3>
+          <p style="font-size: 13px;">Quartz clock thermal drift causes phantom movement and fake speed readings when stationary.</p>
+        </div>
+        <div class="card">
+          <h3 style="font-size: 15px;">4. Network Variance</h3>
+          <p style="font-size: 13px;">Disparity between GNSS (&plusmn;3m), Wi-Fi (&plusmn;20m), and Cellular Cell-ID (&plusmn;1000m).</p>
+        </div>
+      </div>
+      <div class="card" style="margin-top: 20px;">
+        <h3 style="color: var(--accent);">Project Goal:</h3>
+        <p>Design an intelligent software-defined filtering pipeline to suppress multipath spikes, reduce latency via A-GPS, and deliver smooth sub-10m visualization.</p>
+      </div>
+      <div class="speaker-note">
+        <strong>🎙️ Speaker Script:</strong> "Mobile GPS isn't perfect out of the box. In cities like Mumbai, multipath reflections cause sudden 100m jumps, and cold starts take 45 seconds. GeoTrack directly addresses and eliminates these physical wireless impairments."
+      </div>
+    </div>
+
+    <!-- SLIDE 3 -->
+    <div class="slide" id="slide-3">
+      <h2>Slide 3: Wireless Technologies & Radio Spectrum</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Technology</th>
+            <th>Carrier Frequency (fc)</th>
+            <th>Protocol / Standard</th>
+            <th>Typical Accuracy</th>
+            <th>Time-To-First-Fix</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>GNSS (GPS / NavIC)</strong></td>
+            <td>L1: 1575.42 MHz, L5: 1176.45 MHz</td>
+            <td>CDMA / DSSS (BPSK)</td>
+            <td>&plusmn; 3 &ndash; 10 m</td>
+            <td>30 &ndash; 60 seconds</td>
+          </tr>
+          <tr>
+            <td><strong>A-GPS (Assisted GPS)</strong></td>
+            <td>LTE / 5G Frequency Bands</td>
+            <td>OMA SUPL 2.0 / 3GPP TS 36.355</td>
+            <td>&plusmn; 2 &ndash; 8 m</td>
+            <td><strong>&lt; 2 seconds</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Cellular (LTE/5G)</strong></td>
+            <td>700 MHz &ndash; 2600 MHz</td>
+            <td>Cell-ID, Timing Advance, OTDOA</td>
+            <td>&plusmn; 50 &ndash; 500 m</td>
+            <td>&lt; 1 second</td>
+          </tr>
+          <tr>
+            <td><strong>Wi-Fi (WPS)</strong></td>
+            <td>2.4 GHz (ISM) &amp; 5 GHz (UNII)</td>
+            <td>IEEE 802.11 (RSSI Path Loss)</td>
+            <td>&plusmn; 5 &ndash; 25 m</td>
+            <td>&lt; 2 seconds</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="speaker-note">
+        <strong>🎙️ Speaker Script:</strong> "Here is our wireless hierarchy. To overcome the 45-second cold start, we use A-GPS over LTE via SUPL, where cellular towers inject orbital ephemeris in under 2 seconds. When indoors, the system falls back to IEEE 802.11 Wi-Fi RSSI modeling."
+      </div>
+    </div>
+
+    <!-- SLIDE 4 -->
+    <div class="slide" id="slide-4">
+      <h2>Slide 4: Mathematical Foundations: Geodesy &amp; Trilateration</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3 style="color: var(--accent);">1. 4-Satellite Pseudo-Ranging</h3>
+          <p>Requires &ge; 4 satellites to solve 4 unknowns (x, y, z, &Delta;t<sub>b</sub>):</p>
+          <div class="formula">
+            &rho;<sub>i</sub> = &radic;((X<sub>i</sub>-x)<sup>2</sup> + (Y<sub>i</sub>-y)<sup>2</sup> + (Z<sub>i</sub>-z)<sup>2</sup>) + c(&Delta;t<sub>b</sub> - &Delta;t<sup>i</sup>) + I<sub>i</sub> + T<sub>i</sub>
+          </div>
+          <p style="font-size: 13px; color: var(--text-muted);">&Delta;t<sub>b</sub> = Quartz clock bias; I<sub>i</sub>, T<sub>i</sub> = Atmospheric delays.</p>
+        </div>
+        <div class="card">
+          <h3 style="color: var(--accent);">2. Geodesic Haversine Formula</h3>
+          <p>Computes true surface distance on WGS-84 oblate spheroid (R = 6,371,000m):</p>
+          <div class="formula">
+            a = sin<sup>2</sup>(&Delta;&phi;/2) + cos(&phi;<sub>1</sub>)cos(&phi;<sub>2</sub>)sin<sup>2</sup>(&Delta;&lambda;/2)<br>
+            d = 2R &middot; atan2(&radic;a, &radic;(1-a))
+          </div>
+          <p style="font-size: 13px; color: var(--text-muted);">Eliminates planar flat-surface distortion.</p>
+        </div>
+      </div>
+      <div class="speaker-note">
+        <strong>🎙️ Speaker Script:</strong> "Why are 4 satellites needed? The 4th satellite is strictly required to solve for receiver clock bias offset &Delta;t<sub>b</sub>. We calculate distance using the Haversine formula on the WGS-84 ellipsoid to prevent spherical distortion errors."
+      </div>
+    </div>
+
+    <!-- SLIDE 5 -->
+    <div class="slide" id="slide-5">
+      <h2>Slide 5: Signal Processing: 1D Kalman Filter &amp; Outlier Gate</h2>
+      <div class="card card-highlight" style="margin-bottom: 16px;">
+        <p style="font-weight: 600;">Data Flow: Raw GPS Fix &rarr; Kinematic Jump Gate &rarr; Stationary Deadband &rarr; 1D Kalman Filter &rarr; Clean Route</p>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3 style="color: var(--accent);">Outlier Jump Gate</h3>
+          <div class="formula">
+            D<sub>max</sub> = (v<sub>max</sub> &middot; &Delta;t) + 2.5 &middot; &sigma;<sub>accuracy</sub>
+          </div>
+          <p>Rejects multipath reflection artifacts where velocity exceeds realistic vehicular limits (v &gt; 45 m/s or 162 km/h).</p>
+        </div>
+        <div class="card">
+          <h3 style="color: var(--accent);">1D Discrete Kalman Filter</h3>
+          <div class="formula">
+            Measurement Variance R = (&sigma;<sub>accuracy</sub> / 111320)<sup>2</sup><br>
+            Kalman Gain K = P / (P + R)
+          </div>
+          <p>Dynamic variance: when GPS uncertainty increases, Kalman gain drops to trust kinematic momentum over noisy readings.</p>
+        </div>
+      </div>
+      <div class="speaker-note">
+        <strong>🎙️ Speaker Script:</strong> "Our filtering pipeline in `src/utils/geoDistance.ts` checks every frame against a 45 m/s velocity gate. If a multipath jump occurs, it is dropped. Accepted points pass into our 1D Kalman filter, where variance R scales dynamically with reported GPS accuracy."
+      </div>
+    </div>
+
+    <!-- SLIDE 6 -->
+    <div class="slide" id="slide-6">
+      <h2>Slide 6: System Architecture &amp; Field Console UI</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3 style="color: var(--accent);">Technical Implementation</h3>
+          <ul>
+            <li><strong>Frontend Core:</strong> React 19, TypeScript 5.8, Vite 8.3</li>
+            <li><strong>Cartography:</strong> Leaflet 1.9 + OpenStreetMap tiles (no API keys required)</li>
+            <li><strong>W3C Geolocation API:</strong> Hardware LNA activation via <code>enableHighAccuracy: true</code></li>
+            <li><strong>Export Format:</strong> Standard GeoJSON export for QGIS &amp; Google Earth integration</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 style="color: var(--accent);">Field Console Features</h3>
+          <ul>
+            <li><strong>Live 2x2 Telemetry Matrix:</strong> Ground Speed, Bearing, Distance, HDOP Grade</li>
+            <li><strong>Classroom Demo Mode:</strong> 15-waypoint high-fidelity coastal simulation along Mumbai Marine Drive</li>
+            <li><strong>Dual Coordinate Formats:</strong> Decimal Degrees (DD) and Degrees Minutes Seconds (DMS)</li>
+            <li><strong>Local Offline Storage:</strong> Indexed session history</li>
+          </ul>
+        </div>
+      </div>
+      <div class="speaker-note">
+        <strong>🎙️ Speaker Script:</strong> "GeoTrack features an authentic Cartographer's Field Console UI. For indoor academic halls where satellite reception is blocked, we built a Classroom Demo Mode simulating a coastal route along Mumbai's Marine Drive with live speed, bearing, and HDOP readouts."
+      </div>
+    </div>
+
+    <!-- SLIDE 7 -->
+    <div class="slide" id="slide-7">
+      <h2>Slide 7: Experimental Results &amp; Future Scope</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3 style="color: var(--accent);">Experimental Accuracy</h3>
+          <ul>
+            <li><strong>Coastal / Open Sky (Marine Drive):</strong> 3.2m &ndash; 5.8m (HDOP 0.8 &ndash; 1.2, &lt; 2% rejection)</li>
+            <li><strong>Urban High-Rise Canyon:</strong> 25m &ndash; 65m (22% multipath spikes caught by Kalman filter)</li>
+            <li><strong>Indoor Wi-Fi (Basement):</strong> 18m &ndash; 45m (Seamless A-GPS &amp; Wi-Fi fallback)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 style="color: var(--accent);">Future Wireless Enhancements</h3>
+          <ul>
+            <li><strong>Real-Time Kinematic (RTK):</strong> Carrier phase tracking via NTRIP for sub-centimeter (&lt; 2cm) precision.</li>
+            <li><strong>Sensor Fusion Dead-Reckoning:</strong> IMU (accelerometer + gyro) EKF integration for tunnels.</li>
+            <li><strong>Raw GNSS APIs:</strong> Reading Android carrier-to-noise ratio (C/N<sub>0</sub>) directly.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="speaker-note">
+        <strong>🎙️ Speaker Script:</strong> "In conclusion, GeoTrack delivers 3-5m precision outdoors and successfully intercepted 22% of multipath errors in urban canyons. Future upgrades include RTK carrier phase tracking for 2cm accuracy. Thank you! We are now open for questions."
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <div class="page-indicator" id="page-counter">Slide 1 of 7</div>
+    <div class="controls">
+      <button onclick="prevSlide()">&larr; Previous</button>
+      <button onclick="nextSlide()">Next &rarr;</button>
+    </div>
+  </footer>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 7;
+
+    function showSlide(index) {
+      if (index < 1) index = 1;
+      if (index > totalSlides) index = totalSlides;
+      currentSlide = index;
+      document.querySelectorAll('.slide').forEach((el, idx) => {
+        el.classList.toggle('active', idx + 1 === currentSlide);
+      });
+      document.getElementById('page-counter').innerText = `Slide ${currentSlide} of ${totalSlides}`;
+    }
+
+    function nextSlide() { showSlide(currentSlide + 1); }
+    function prevSlide() { showSlide(currentSlide - 1); }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') nextSlide();
+      if (e.key === 'ArrowLeft') prevSlide();
+    });
+  </script>
+</body>
+</html>

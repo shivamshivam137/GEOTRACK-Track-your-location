@@ -70,6 +70,7 @@ export function useGeolocation(): UseGeolocationReturn {
   const kalmanLngRef     = useRef<KalmanFilter1D | null>(null);
   const lastBearingRef   = useRef<number | null>(null);
   const qualityRef       = useRef<GpsSignalQuality>({ ...DEFAULT_QUALITY });
+  const isHighAccuracyRef = useRef<boolean>(true);
 
   // Keep refs in sync with state so callbacks always see fresh values
   useEffect(() => { pointsRef.current = points; }, [points]);
@@ -136,7 +137,12 @@ export function useGeolocation(): UseGeolocationReturn {
         qualityRef.current = q;
         setSignalQuality({ ...q });
         console.debug('[GeoTrack GPS] Filtered:', filter.reason);
-        return; // discard this reading
+
+        // Keep currentPoint responsive even during stationary periods
+        if (filter.reason?.includes('Stationary')) {
+          setCurrentPoint(curr => curr ? { ...curr, timestamp: now, isoTimestamp: new Date(now).toISOString(), accuracy: Math.round(accuracy * 10) / 10 } : curr);
+        }
+        return; // discard from trajectory path
       }
 
       q.consecutiveAccepted += 1;
@@ -202,16 +208,56 @@ export function useGeolocation(): UseGeolocationReturn {
   }, []);
 
   const handlePositionError = useCallback((err: GeolocationPositionError) => {
+    // If high-accuracy GNSS hardware failed or timed out (common on desktop/laptops),
+    // automatically fall back to standard accuracy (Wi-Fi/Network geolocation)
+    if (isHighAccuracyRef.current && (err.code === err.TIMEOUT || err.code === err.POSITION_UNAVAILABLE)) {
+      console.warn('[GeoTrack GPS] GNSS hardware unavailable or timed out. Falling back to Wi-Fi/Network positioning...');
+      isHighAccuracyRef.current = false;
+
+      if (watchIdRef.current !== null) {
+        navigator.geolocation.clearWatch(watchIdRef.current);
+        watchIdRef.current = null;
+      }
+
+      // 1. Immediate standard fix request
+      navigator.geolocation.getCurrentPosition(
+        handlePositionSuccess,
+        (fallbackErr) => {
+          let message = 'Unable to acquire location fix via GNSS or Wi-Fi network.';
+          if (fallbackErr.code === fallbackErr.PERMISSION_DENIED) {
+            message = 'Location permission denied. Click the lock/tune icon in your browser URL bar to allow location access.';
+          } else if (fallbackErr.code === fallbackErr.POSITION_UNAVAILABLE) {
+            message = 'Location signal unavailable. On Windows, check Settings > Privacy & Security > Location is turned ON.';
+          }
+          setErrorMessage(message);
+          setStatus('error');
+        },
+        { enableHighAccuracy: false, timeout: 15000, maximumAge: 10000 }
+      );
+
+      // 2. Continuous watch with standard accuracy
+      const fallbackId = navigator.geolocation.watchPosition(
+        handlePositionSuccess,
+        (fallbackErr) => {
+          setErrorMessage('Location tracking lost: ' + fallbackErr.message);
+          setStatus('error');
+        },
+        { enableHighAccuracy: false, timeout: 20000, maximumAge: 5000 }
+      );
+      watchIdRef.current = fallbackId;
+      return;
+    }
+
     let message = 'An unexpected GPS acquisition error occurred.';
     switch (err.code) {
       case err.PERMISSION_DENIED:
-        message = 'Location access denied. Please grant permission in your browser URL bar.';
+        message = 'Location permission denied! Please click the lock/settings icon in your browser address bar to allow location access.';
         break;
       case err.POSITION_UNAVAILABLE:
-        message = 'Location signal unavailable. Ensure GPS/location services are enabled.';
+        message = 'Location signal unavailable. Ensure Windows/Phone Location Services are turned ON.';
         break;
       case err.TIMEOUT:
-        message = 'GPS acquisition timed out — retrying satellite connection…';
+        message = 'GPS acquisition timed out. Retrying satellite connection…';
         break;
     }
     setErrorMessage(message);
@@ -220,7 +266,7 @@ export function useGeolocation(): UseGeolocationReturn {
       navigator.geolocation.clearWatch(watchIdRef.current);
       watchIdRef.current = null;
     }
-  }, []);
+  }, [handlePositionSuccess]);
 
   const startRealTracking = useCallback(() => {
     if (!('geolocation' in navigator)) {
@@ -235,15 +281,28 @@ export function useGeolocation(): UseGeolocationReturn {
 
     setErrorMessage(null);
     setStatus('requesting');
+    isHighAccuracyRef.current = true;
 
+    // 1. Immediately request current position to prompt browser and acquire initial fix fast
+    navigator.geolocation.getCurrentPosition(
+      handlePositionSuccess,
+      handlePositionError,
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 1000
+      }
+    );
+
+    // 2. Start continuous position watch
     try {
       const id = navigator.geolocation.watchPosition(
         handlePositionSuccess,
         handlePositionError,
         {
-          enableHighAccuracy: true,  // Use GNSS chip, not Wi-Fi/Cell fallback
-          timeout: 30000,            // 30 s acquisition window (was 15 s — too short indoors)
-          maximumAge: 500            // Accept cached fix up to 500 ms old — reduces gaps on weak signal
+          enableHighAccuracy: true,  // Use GNSS chip first
+          timeout: 15000,            // 15s window before fallback triggers
+          maximumAge: 1000           // Fresh fixes
         }
       );
       watchIdRef.current = id;

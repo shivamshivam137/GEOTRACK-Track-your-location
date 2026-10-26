@@ -11,7 +11,8 @@ import {
   Save,
   AlertTriangle,
   Zap,
-  Radio
+  Radio,
+  RefreshCw
 } from 'lucide-react';
 import type { LocationPoint, TrackingTelemetry } from '../types/tracking';
 import {
@@ -249,10 +250,46 @@ export const TelemetryPanel: React.FC<TelemetryPanelProps> = ({
         </div>
         <div className="telemetry-keyvalue">
           <span className="telemetry-key">Carrier / Network:</span>
-          <span className="telemetry-val" style={{ color: 'var(--color-chartreuse)' }}>
-            {isSimulated ? 'Simulated Generator' : 'Browser GNSS / WiFi Position'}
+          <span className="telemetry-val" style={{ 
+            color: isSimulated 
+              ? 'var(--color-chartreuse)' 
+              : (accuracyMeters && accuracyMeters > 5000 ? 'var(--color-vermilion)' : (accuracyMeters && accuracyMeters <= 30 ? '#8BDF5E' : 'var(--color-chartreuse)')) 
+          }}>
+            {isSimulated 
+              ? 'Simulated Generator' 
+              : (!accuracyMeters 
+                  ? 'Awaiting Fix' 
+                  : (accuracyMeters > 5000 
+                      ? 'ISP Gateway (IP Geolocation)' 
+                      : (accuracyMeters <= 30 ? 'GNSS Satellites (L1/L5)' : 'Wi-Fi BSSID / Cell Tower')))}
           </span>
         </div>
+
+        {/* IP Geolocation Coarse Warning for Desktops */}
+        {!isSimulated && accuracyMeters !== null && accuracyMeters > 5000 && (
+          <div style={{
+            margin: '8px 0',
+            padding: '8px 10px',
+            background: 'rgba(236, 91, 59, 0.12)',
+            border: '1px solid rgba(236, 91, 59, 0.35)',
+            borderRadius: '4px',
+            fontSize: '11px',
+            color: '#FFB5A7',
+            fontFamily: 'var(--font-mono)',
+            lineHeight: '1.4'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600, color: 'var(--color-vermilion)', marginBottom: '4px' }}>
+              <AlertTriangle size={14} style={{ flexShrink: 0 }} />
+              <span>Coarse IP Geolocation Active</span>
+            </div>
+            <p style={{ margin: 0 }}>
+              Device lacks satellite GNSS hardware. Position is estimated via ISP routing gateway (±{(accuracyMeters / 1000).toFixed(0)} km).
+            </p>
+            <div style={{ marginTop: '6px', color: 'var(--text-on-dark-secondary)', fontSize: '10px' }}>
+              💡 <em>To track real physical coordinates with 5–15m precision, open this URL on a smartphone with GPS enabled, or switch to Demo Mode.</em>
+            </div>
+          </div>
+        )}
 
         {/* Kalman Filter Statistics — only shown in real GPS mode */}
         {!isSimulated && signalQuality && (
@@ -308,7 +345,18 @@ export const TelemetryPanel: React.FC<TelemetryPanelProps> = ({
 
         {/* Real GPS Tracking Buttons */}
         <div className="control-buttons-row">
-          {!isTracking && !isRequesting ? (
+          {isRequesting ? (
+            <button
+              type="button"
+              onClick={onStopRealTracking}
+              className="btn-instrument btn-chartreuse"
+              style={{ flex: 1, padding: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+              aria-label="Acquiring GPS fix"
+            >
+              <RefreshCw size={16} style={{ animation: 'spin 1s linear infinite' }} />
+              <span>ACQUIRING SATELLITE FIX…</span>
+            </button>
+          ) : !isTracking ? (
             <button
               type="button"
               onClick={onStartRealTracking}
@@ -332,6 +380,40 @@ export const TelemetryPanel: React.FC<TelemetryPanelProps> = ({
             </button>
           )}
         </div>
+
+        {isRequesting && (
+          <div style={{ marginTop: '8px', padding: '8px 10px', background: 'rgba(216, 243, 106, 0.1)', border: '1px solid rgba(216, 243, 106, 0.3)', borderRadius: '4px', fontSize: '11px', color: 'var(--color-chartreuse)', fontFamily: 'var(--font-mono)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Radio size={14} style={{ flexShrink: 0 }} />
+            <span>Awaiting GPS / Network fix. If browser asks for location permission, please click <strong>Allow</strong>.</span>
+          </div>
+        )}
+
+        {errorMessage && !isTracking && !isRequesting && (
+          <div style={{ marginTop: '8px', padding: '10px', background: 'rgba(236, 91, 59, 0.15)', border: '1px solid var(--color-vermilion)', borderRadius: '4px', fontSize: '11px', color: '#FFB5A7', fontFamily: 'var(--font-mono)' }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', marginBottom: '8px' }}>
+              <AlertTriangle size={15} color="var(--color-vermilion)" style={{ flexShrink: 0, marginTop: '1px' }} />
+              <span>{errorMessage}</span>
+            </div>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button
+                type="button"
+                onClick={onStartRealTracking}
+                className="btn-instrument btn-chartreuse"
+                style={{ padding: '4px 10px', fontSize: '10px' }}
+              >
+                Retry GPS
+              </button>
+              <button
+                type="button"
+                onClick={onStartDemoMode}
+                className="btn-instrument btn-forest"
+                style={{ padding: '4px 10px', fontSize: '10px', color: 'var(--color-ivory)' }}
+              >
+                Run Demo Route
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Demo Simulation Controls (Reproducible Classroom Presentation) */}
         <div style={{ marginTop: '8px', padding: '10px', background: 'rgba(0,0,0,0.2)', borderRadius: '4px', border: '1px dashed var(--border-dark-subtle)' }}>

@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoTrack — WMC Presentation & Viva Comprehensive Dossier</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+    :root {
+      --primary: #0F1715;
+      --accent: #2C6E49;
+      --accent-light: #E8F5E9;
+      --accent-gold: #B38600;
+      --alert-bg: #FFF3E0;
+      --alert-border: #FFB74D;
+      --text: #1E2922;
+      --text-muted: #526058;
+      --border: #D0DBCE;
+      --code-bg: #F4F6F4;
+      --header-bg: #172A27;
+      --header-text: #F3F0E7;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: var(--text);
+      background: #FFFFFF;
+      line-height: 1.55;
+      font-size: 11pt;
+      padding: 0;
+      margin: 0;
+    }
+
+    .no-print-bar {
+      background: #172A27;
+      color: #F3F0E7;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+    .no-print-bar button {
+      background: #D8F36A;
+      color: #172A27;
+      border: none;
+      padding: 8px 18px;
+      font-weight: 700;
+      font-size: 13px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .document-container {
+      max-width: 850px;
+      margin: 0 auto;
+      padding: 40px 48px;
+    }
+
+    /* Cover / Academic Header */
+    .report-header {
+      border-bottom: 2px solid var(--header-bg);
+      padding-bottom: 20px;
+      margin-bottom: 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .university-tag {
+      font-size: 10pt;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+    }
+    .report-title {
+      font-size: 24pt;
+      font-weight: 800;
+      color: var(--header-bg);
+      line-height: 1.15;
+      margin-bottom: 6px;
+    }
+    .report-subtitle {
+      font-size: 12pt;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .meta-box {
+      text-align: right;
+      font-size: 9pt;
+      color: var(--text-muted);
+      background: var(--code-bg);
+      padding: 10px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+    .meta-box strong { color: var(--header-bg); }
+
+    /* Headings */
+    h2 {
+      font-size: 15pt;
+      font-weight: 700;
+      color: var(--header-bg);
+      margin-top: 28px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-left: 4px solid var(--accent);
+      padding-left: 10px;
+    }
+    h3 {
+      font-size: 12pt;
+      font-weight: 700;
+      color: var(--accent);
+      margin-top: 18px;
+      margin-bottom: 6px;
+    }
+    p { margin-bottom: 10px; }
+
+    /* Concept Cards */
+    .card {
+      background: #FAFCFA;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px 18px;
+      margin-bottom: 14px;
+      page-break-inside: avoid;
+    }
+    .card-title {
+      font-weight: 700;
+      font-size: 11pt;
+      color: var(--header-bg);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Callout & Alert Box */
+    .alert-box {
+      background: var(--alert-bg);
+      border-left: 4px solid var(--alert-border);
+      padding: 12px 16px;
+      border-radius: 4px;
+      margin: 14px 0;
+      font-size: 10pt;
+      page-break-inside: avoid;
+    }
+    .alert-box strong { color: #D84315; }
+
+    .highlight-box {
+      background: var(--accent-light);
+      border-left: 4px solid var(--accent);
+      padding: 12px 16px;
+      border-radius: 4px;
+      margin: 14px 0;
+      font-size: 10pt;
+      page-break-inside: avoid;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 20px;
+      font-size: 9.5pt;
+      page-break-inside: avoid;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      text-align: left;
+    }
+    th {
+      background: #EFEFEF;
+      color: var(--header-bg);
+      font-weight: 700;
+    }
+    tr:nth-child(even) { background: #FAFAFA; }
+
+    /* Script Blocks */
+    .script-step {
+      background: #F8F9FA;
+      border: 1px solid var(--border);
+      border-left: 3px solid #172A27;
+      padding: 10px 14px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      page-break-inside: avoid;
+    }
+    .script-step strong {
+      display: block;
+      color: var(--accent);
+      font-size: 10pt;
+      margin-bottom: 3px;
+    }
+
+    /* Q&A / Viva */
+    .qa-item {
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed var(--border);
+      page-break-inside: avoid;
+    }
+    .question {
+      font-weight: 700;
+      color: #172A27;
+      margin-bottom: 4px;
+    }
+    .answer {
+      color: #2F3E38;
+      padding-left: 14px;
+      border-left: 2px solid var(--accent);
+      font-size: 10pt;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      font-size: 8pt;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 3px;
+      background: #E0E7E4;
+      color: #172A27;
+      margin-right: 4px;
+    }
+
+    /* Page Breaks for PDF */
+    .page-break {
+      page-break-before: always;
+    }
+
+    @media print {
+      .no-print-bar { display: none !important; }
+      body {
+        background: white;
+        color: black;
+        font-size: 10pt;
+      }
+      .document-container {
+        padding: 0;
+        max-width: 100%;
+      }
+      a { text-decoration: none; color: inherit; }
+      @page {
+        margin: 1.5cm;
+        size: A4 portrait;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="no-print-bar">
+    <div>
+      <strong>GeoTrack Presentation & Viva Guide</strong> — Print-Ready Academic Dossier
+    </div>
+    <button onclick="window.print()">📥 Print / Save as PDF</button>
+  </div>
+
+  <div class="document-container">
+
+    <!-- Header Section -->
+    <header class="report-header">
+      <div>
+        <div class="university-tag">University of Mumbai • BE CSE (Data Science)</div>
+        <h1 class="report-title">GeoTrack</h1>
+        <div class="report-subtitle">Real-Time Geospatial Telemetry & Trajectory Analysis System</div>
+      </div>
+      <div class="meta-box">
+        <div><strong>Subject:</strong> Wireless & Mobile Comm.</div>
+        <div><strong>Semester:</strong> BE Semester 3</div>
+        <div><strong>Focus:</strong> GNSS, A-GPS & Signal Filtering</div>
+        <div><strong>Datum:</strong> WGS-84 / Web Mercator</div>
+      </div>
+    </header>
+
+    <!-- SECTION 1 -->
+    <section>
+      <h2>1. Project Overview in Brief</h2>
+      <p>
+        <strong>GeoTrack</strong> is a high-precision, field-ready geospatial telemetry system engineered to interface directly with device hardware radios (satellite GNSS, 4G/5G cellular towers, and Wi-Fi networks). It captures real-time position streams, filters out urban reflection noise using an adaptive <strong>Kalman Filter</strong>, and delivers an interactive mission control dashboard displaying ground speed, heading, altitude, and trajectory logs.
+      </p>
+      <div class="highlight-box">
+        <strong>Core Engineering Problem Solved:</strong> Raw satellite location data often jumps wildly (by tens of meters) due to atmospheric delays and building reflections. GeoTrack turns noisy, scattered radio measurements into a smooth, accurate, vehicle-grade path in real time.
+      </div>
+    </section>
+
+    <!-- SECTION 2 -->
+    <section>
+      <h2>2. Wireless & Mobile Communication (WMC) Concepts</h2>
+
+      <div class="card">
+        <div class="card-title">📡 A. Satellite Trilateration: The "Sphere Intersection" Concept</div>
+        <p>
+          GPS satellites in medium Earth orbit (20,200 km altitude) continuously broadcast radio signals containing atomic clock timestamps. Your device does <strong>not</strong> send signals back to space; it only listens (downlink only).
+        </p>
+        <p>
+          Because radio waves travel at the speed of light (<strong>300,000 km/s</strong>), your receiver measures the microsecond delay to calculate its distance from each satellite:
+        </p>
+        <div style="background: var(--code-bg); padding: 8px 12px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 9.5pt; margin-bottom: 8px;">
+          Distance = Speed of Light (c) × Time Delay (Δt)
+        </div>
+        <ul style="padding-left: 20px; font-size: 10pt; line-height: 1.6;">
+          <li><strong>1 Satellite:</strong> Places you somewhere on the surface of a giant sphere in space.</li>
+          <li><strong>2 Satellites:</strong> Narrows your location to the circular intersection of two spheres.</li>
+          <li><strong>3 Satellites:</strong> Intersects into two discrete points on Earth.</li>
+          <li><strong>4th Satellite (Crucial!):</strong> Resolves the clock bias between your phone's cheap quartz clock and the satellite's atomic clock, fixing your exact <strong>Latitude, Longitude, and MSL Altitude</strong>.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📶 B. Carrier Frequencies: GPS L1, Dual-Band L5, and NavIC</div>
+        <p>
+          Satellites transmit across dedicated microwave bands:
+        </p>
+        <ul style="padding-left: 20px; font-size: 10pt; line-height: 1.6;">
+          <li><strong>GPS L1 Band (1575.42 MHz):</strong> The legacy civilian signal. Good coverage, but susceptible to signal reflections off glass buildings.</li>
+          <li><strong>Modern L5 Band (1176.45 MHz):</strong> High-power, wide-bandwidth signal with advanced signal-to-noise ratio (SNR) that filters out bounced waves in urban areas.</li>
+          <li><strong>NavIC (IRNSS):</strong> India’s independent regional navigation satellite system developed by ISRO, operating on L5 and S-band frequencies, tailored for the Indian subcontinent.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🏙️ C. Multipath Interference ("Urban Canyons")</div>
+        <p>
+          When tracking in urban areas surrounded by tall concrete and glass buildings, direct line-of-sight to satellites is obstructed. The radio wave bounces off glass facades and pavements before entering your antenna.
+        </p>
+        <p>
+          <strong>Impact:</strong> Because the reflected signal took a longer physical route, the calculated distance is artificially enlarged, creating <em>"ghost jumps"</em> (teleporting across buildings).
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🚀 D. Assisted GPS (A-GPS) & Cellular / Wi-Fi Positioning (WPS)</div>
+        <p>
+          Direct satellite signals are faint (roughly -130 dBm). A cold start without assistance can take 1 to 5 minutes to download satellite orbit tables (almanac and ephemeris).
+        </p>
+        <ul style="padding-left: 20px; font-size: 10pt; line-height: 1.6;">
+          <li><strong>A-GPS:</strong> The device connects to 4G/5G cell towers to download orbital ephemeris data in under 2 seconds over the cellular data channel.</li>
+          <li><strong>Wi-Fi Positioning (WPS):</strong> Indoors, where satellite microwaves are blocked by concrete slabs, the phone reads the unique MAC addresses (BSSIDs) of nearby routers and looks them up in global geolocation databases to pinpoint location.</li>
+        </ul>
+      </div>
+
+      <div class="alert-box">
+        <strong>⚠️ Key Viva Concept: Why Laptops Show "Nagpur" When You Are in "Panvel"</strong>
+        <p style="margin-top: 6px;">
+          Laptops and desktop PCs do <strong>NOT</strong> have GNSS satellite chips. When the browser requests location on a PC, it falls back to <strong>IP Geolocation</strong>. Indian broadband providers route traffic through central regional data centers and NOCs (e.g. Nagpur or Mumbai hubs). The IP lookup returns the location of your ISP's server, with a wide uncertainty radius of <strong>±50,000 meters (50 km)</strong>.
+        </p>
+        <p style="margin: 4px 0 0;">
+          <strong>Solution:</strong> Opening GeoTrack on a smartphone engages real dual-frequency GNSS hardware, delivering true <strong>±3 to 15 meter</strong> accuracy in Panvel.
+        </p>
+      </div>
+    </section>
+
+    <!-- SECTION 3: PAGE BREAK -->
+    <div class="page-break"></div>
+
+    <section>
+      <h2>3. Noise Filtering: The Kalman Filter Explained Simply</h2>
+      <p>
+        Raw GPS coordinates bounce erratically due to atmospheric jitter. GeoTrack eliminates this using a two-stage filter:
+      </p>
+
+      <div class="card">
+        <div class="card-title">🧠 The Intuitive "Two Friends" Kalman Analogy</div>
+        <p>
+          Imagine you are walking down a road with your eyes closed:
+        </p>
+        <ul style="padding-left: 20px; font-size: 10pt; line-height: 1.6;">
+          <li><strong>Friend 1 (The Physics Predictor):</strong> Knows your walking velocity. He predicts: <em>"Shivam was at meter 10, walking at 1 m/s, so after 1 second he must be near meter 11."</em></li>
+          <li><strong>Friend 2 (The GPS Sensor):</strong> Opens his eyes with blurry vision and says: <em>"I see him at meter 13, but my accuracy is ±4 meters."</em></li>
+          <li><strong>The Kalman Algorithm:</strong> Calculates the mathematical balance between the two. When GPS accuracy is sharp (low HDOP), it relies heavily on the GPS reading. When GPS signal is degraded or fluctuating, it relies on the physical prediction, producing a smooth trajectory without jitter.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🛡️ Velocity-Gated Jump Filter & Stationary Deadband</div>
+        <ul style="padding-left: 20px; font-size: 10pt; line-height: 1.6;">
+          <li><strong>Teleport Rejection:</strong> Calculates implied velocity between consecutive points. If the implied speed exceeds <strong>300 km/h</strong> and falls outside the uncertainty circle, it is instantly discarded as a multipath artifact.</li>
+          <li><strong>Stationary Deadband:</strong> When stationary at a traffic signal or desk, satellite noise makes coordinates drift. Any movement under <strong>1.5 meters</strong> (or under 2% of the accuracy circle) is flagged as stationary noise.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- SECTION 4 -->
+    <section>
+      <h2>4. System Architecture & Live Telemetry Metrics</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Telemetry Metric</th>
+            <th>Wireless & Physical Meaning</th>
+            <th>Field Use Case</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Coordinates (Lat/Lng)</strong></td>
+            <td>Angular position on WGS-84 ellipsoidal Earth model</td>
+            <td>Pinpoint location mapping</td>
+          </tr>
+          <tr>
+            <td><strong>Accuracy (HDOP)</strong></td>
+            <td>Horizontal Dilution of Precision (satellite geometry quality)</td>
+            <td>Confidence radius (in meters) for position fix</td>
+          </tr>
+          <tr>
+            <td><strong>Instant Ground Speed</strong></td>
+            <td>Haversine differential over delta time (km/h)</td>
+            <td>Vehicle and pedestrian transit analysis</td>
+          </tr>
+          <tr>
+            <td><strong>Bearing / Heading</strong></td>
+            <td>Forward azimuth relative to True North (0°–360°)</td>
+            <td>Compass heading & directional orientation</td>
+          </tr>
+          <tr>
+            <td><strong>MSL Altitude</strong></td>
+            <td>Height above Mean Sea Level calculated via 4+ satellites</td>
+            <td>Topographical and elevation profiling</td>
+          </tr>
+          <tr>
+            <td><strong>Mission Clock</strong></td>
+            <td>Continuous elapsed mission time since first lock</td>
+            <td>Time-distance integral for route profiling</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- SECTION 5: PAGE BREAK -->
+    <div class="page-break"></div>
+
+    <section>
+      <h2>5. Slide-by-Slide Speaking Script for Presentation</h2>
+      <p style="color: var(--text-muted); font-size: 10pt; margin-bottom: 12px;">
+        Use these exact spoken points during your 7-slide committee evaluation:
+      </p>
+
+      <div class="script-step">
+        <strong>Slide 1 — Title & Introduction</strong>
+        "Good morning respected evaluators. Today we present GeoTrack, an intelligent real-time geospatial telemetry and trajectory tracking platform designed around the principles of Wireless and Mobile Communication."
+      </div>
+
+      <div class="script-step">
+        <strong>Slide 2 — The Engineering Problem</strong>
+        "Standard civilian GPS suffers from satellite clock drift, atmospheric ionospheric refraction, and urban multipath reflections. Our objective is to capture raw radio streams and apply intelligent filtering to deliver reliable, jitter-free positioning."
+      </div>
+
+      <div class="script-step">
+        <strong>Slide 3 — Wireless Positioning Architecture</strong>
+        "Our system receives signals from the space segment (GNSS L1/L5 microwave frequencies), aided by the terrestrial cellular network (A-GPS) and local Wi-Fi BSSID beacons for indoor/rapid time-to-first-fix."
+      </div>
+
+      <div class="script-step">
+        <strong>Slide 4 — Noise Filtering & Kalman Smoothing</strong>
+        "Rather than accepting raw, erratic coordinates, GeoTrack runs an adaptive 1D Kalman Filter combined with a velocity-gate jump filter. This prevents false jumps and stationary drift without introducing perceptible latency."
+      </div>
+
+      <div class="script-step">
+        <strong>Slide 5 — Real-time Telemetry Dashboard</strong>
+        "Our telemetry engine computes instant ground velocity, heading angles relative to True North, and Mean Sea Level elevation, rendering the path smoothly on an interactive WGS-84 vector map."
+      </div>
+
+      <div class="script-step">
+        <strong>Slide 6 — Network Tradeoffs & Classroom Demonstration</strong>
+        "We diagnosed the fundamental distinction between true smartphone hardware GNSS (3–15 meter precision) and desktop IP-based fallback (50 km ISP radius). For classroom evaluations, we built an integrated deterministic trajectory simulator."
+      </div>
+
+      <div class="script-step">
+        <strong>Slide 7 — Conclusion & Future Scope</strong>
+        "GeoTrack demonstrates the practical application of wireless physical-layer propagation theory and real-time algorithmic smoothing. We welcome your questions."
+      </div>
+    </section>
+
+    <!-- SECTION 6 -->
+    <section>
+      <h2>6. Anticipated Viva / Examiner Questions & Answers</h2>
+
+      <div class="qa-item">
+        <div class="question">Q1: Why are four satellites required instead of three for GPS?</div>
+        <div class="answer">
+          Three satellites provide three spheres that intersect at two points, one of which can be discarded as unrealistic. However, receiver quartz clocks have slight time inaccuracies. Because radio waves travel at 300,000 km/s, even a 1-microsecond clock error causes a 300-meter position error. The 4th satellite solves for this receiver clock bias (Δt), locking 3D coordinates accurately.
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="question">Q2: What is HDOP and what does it indicate?</div>
+        <div class="answer">
+          HDOP stands for <em>Horizontal Dilution of Precision</em>. It is a mathematical factor representing satellite geometry. When satellites are spread widely across the sky, HDOP is low (&lt; 2.0) and precision is high. If all visible satellites are clustered in one tight corner, HDOP is high (&gt; 5.0) and horizontal accuracy degrades significantly.
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="question">Q3: Why doesn't GPS work inside underground tunnels or metro stations?</div>
+        <div class="answer">
+          GNSS satellites broadcast in the microwave spectrum (1.1 to 1.5 GHz) with transmitter power of only 25–50 watts across a 20,000 km distance. Concrete, steel reinforcements, and earth completely attenuate and absorb these low-power microwave signals, causing total loss of Signal-to-Noise Ratio (SNR).
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="question">Q4: How does your Kalman Filter differ from a simple moving average?</div>
+        <div class="answer">
+          A simple moving average introduces lag/delay and treats all points equally. The Kalman Filter dynamically weights measurements based on the incoming sensor's HDOP accuracy: if a measurement has high uncertainty, it relies on physical motion prediction; if accuracy is sharp, it favors the sensor reading, maintaining zero tracking lag.
+        </div>
+      </div>
+    </section>
+
+    <footer style="margin-top: 36px; padding-top: 14px; border-top: 1px solid var(--border); font-size: 8.5pt; color: var(--text-muted); display: flex; justify-content: space-between;">
+      <span>GeoTrack Technical Dossier • Mumbai University BE CSE (DS)</span>
+      <span>Wireless & Mobile Communication Mini-Project</span>
+    </footer>
+
+  </div>
+
+</body>
+</html>

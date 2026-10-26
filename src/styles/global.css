@@ -262,3 +262,12 @@ h1, h2, h3, h4, h5, h6 {
 .vermilion-beacon-ring {
   animation: beaconPulse 1.6s infinite cubic-bezier(0.4, 0, 0.6, 1);
 }
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
